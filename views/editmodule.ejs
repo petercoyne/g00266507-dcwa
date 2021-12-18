@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>Edit Module</h1>
-
+	<a href="/listModules"><- Back to Modules</a><br/>
 	<% if (errors != undefined) { %>
 		<ul>
 			<% errors.forEach((err) => { %>
@@ -26,7 +26,6 @@
 		<input type="number" name="credits" value="<%= credits %>" ><br/>
 		<input type="submit" value="Edit Module"/>
 	</form>
-
 
 </body>
 </html>

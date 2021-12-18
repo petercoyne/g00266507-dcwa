@@ -72,6 +72,22 @@ const getStudents = () => {
 	})
 }
 
+const addStudent = (sid, name, gpa) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			sql: `insert into student (sid, name, gpa) values (?, ?, ?)`,
+			values: [sid, name, gpa]
+		} 
+		pool.query(query)
+		.then((result) => {
+			resolve(result)
+		})
+		.catch((error) => {
+			reject(error)
+		})
+	})
+}
+
 const deleteStudent = (sid) => {
 	return new Promise((resolve, reject) => {
 		let query = {
@@ -105,4 +121,4 @@ const getStudentsFromModule = (mid) => {
 	})
 }
 
-module.exports = { getModules, getModule, setModule, getStudents, getStudentsFromModule, deleteStudent }
+module.exports = { getModules, getModule, setModule, getStudents, getStudentsFromModule, deleteStudent, addStudent }

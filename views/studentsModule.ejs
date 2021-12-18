@@ -7,13 +7,13 @@
 	<title>Students</title>
 </head>
 <body>
-	<h1>Students studying <% mid %></h1>
+	<h1>Students studying <%= mid %></h1>
+	<a href="/listModules"><- Back to Modules</a><br/>
 	<table>
 		<tr>
 			<th>Student ID</th>
 			<th>Name</th>
 			<th>GPA</th>
-
 		</tr>
 		<% students.forEach((student) => { %>
 			<tr>
@@ -23,5 +23,6 @@
 			</tr>
 		<% }) %>
 	</table>
+
 </body>
 </html>
