@@ -27,10 +27,34 @@ app.get('/listModules', (req, res) => {
 		})
 })
 
+app.get('/listStudents', (req, res) => {
+	daosql.getStudents()
+		.then((result) => {
+			res.render("students", { students: result })
+		})
+		.catch((error) => {
+			res.send(error)
+		})
+})
+
+app.get('/students/delete/:sid', (req, res) => {
+	daosql.deleteStudent(req.params.sid)
+		.then((result) => {
+			res.redirect('/listStudents')
+		})
+		.catch((error) => {
+			if (error.errno == 1451) {
+				res.render("error", { student: req.params.sid, message: "has associated modules and cannot be deleted." })
+			} else {
+				res.send(`Unknown error occurred while attempting to delete student ${req.params.sid}.`)
+			}
+		})
+})
+
 app.get('/module/students/:mid', (req, res) => {
 	daosql.getStudentsFromModule(req.params.mid)
 		.then((result) => {
-			res.render("students", { students: result, mid: req.params.mid })
+			res.render("studentsModule", { students: result, mid: req.params.mid })
 		})
 		.catch((error) => {
 			res.send(error)
@@ -62,7 +86,7 @@ app.post('/modules/:mid',
 		if (error.isEmpty()) {
 			daosql.setModule(req.params.mid, req.body.name, req.body.credits)
 				.then((result) => {
-					console.log(result);
+					console.log(result)
 					res.render("editmodule", { mid: req.params.mid, name: req.body.name, credits: req.body.credits, errors: undefined, success: `OK. $` })
 				})
 				.catch((error) => {

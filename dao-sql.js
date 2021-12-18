@@ -60,6 +60,35 @@ const setModule = (mid, name, credits) => {
 	})
 }
 
+const getStudents = () => {
+	return new Promise((resolve, reject) => {
+		pool.query("select * from student")
+		.then((result) => {
+			resolve(result)
+		})
+		.catch((error) => {
+			reject(error)
+		})
+	})
+}
+
+const deleteStudent = (sid) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			sql: "delete from student where sid = ?",
+			values: [sid]
+		} 
+		pool.query(query)
+		.then((result) => {
+			resolve(result)
+		})
+		.catch((error) => {
+			console.log(error)
+			reject(error)
+		})
+	})
+}
+
 const getStudentsFromModule = (mid) => {
 	return new Promise((resolve, reject) => {
 		let query = {
@@ -76,4 +105,4 @@ const getStudentsFromModule = (mid) => {
 	})
 }
 
-module.exports = { getModules, getModule, setModule, getStudentsFromModule }
+module.exports = { getModules, getModule, setModule, getStudents, getStudentsFromModule, deleteStudent }
