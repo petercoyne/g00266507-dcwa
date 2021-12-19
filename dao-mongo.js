@@ -31,7 +31,7 @@ var getLecturers = function() {
 
 var addLecturer = function(_id, name, dept) {
 	return new Promise((resolve, reject) => {
-		employees.insertOne({"_id":_id, "name":name, "dept":dept})
+		lecturers.insertOne({"_id":_id, "name":name, "dept":dept})
 			.then((result) => {
 				resolve(result)
 			})

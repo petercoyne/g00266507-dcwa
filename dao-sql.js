@@ -121,4 +121,20 @@ const getStudentsFromModule = (mid) => {
 	})
 }
 
-module.exports = { getModules, getModule, setModule, getStudents, getStudentsFromModule, deleteStudent, addStudent }
+const getDept = (did) => {
+	return new Promise((resolve, reject) => {
+		let query = {
+			sql: "select * from dept where did = ?",
+			values: [did]
+		} 
+		pool.query(query)
+		.then((result) => {
+			resolve(result)
+		})
+		.catch((error) => {
+			reject(error)
+		})
+	})
+}
+
+module.exports = { getModules, getModule, setModule, getStudents, getStudentsFromModule, deleteStudent, addStudent, getDept }
