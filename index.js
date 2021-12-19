@@ -146,37 +146,31 @@ app.post('/addLecturer',
 	],
 	(req, res) => {
 		let error = validationResult(req);
-		var mongoError = "";
 
 		daosql.getDept(req.body.dept)
 		.then((result) => {
 			if (result.length < 1) {
-				mongoError = "Dept does not exist";
+				res.render("addLecturer", { _id: req.params._id, name: req.body.name, dept: req.body.dept, errors: error.errors, mongoError: "No such department"})
 			} else {
-				console.log(result)
+				if (error.isEmpty()) {
+					daomongo.addLecturer(req.body._id, req.body.name, req.body.dept)
+						.then((result) => {
+							res.redirect("/listLecturers")
+						})
+						.catch((err) => {
+							if (err.code == 11000) {
+								mongoError = "_id already exists"
+							}
+							res.render("addLecturer", { _id: req.body._id, name: req.body.name, dept: req.body.dept, errors: error.errors, mongoError: mongoError })
+						})
+				} else {
+					res.render("addLecturer", { _id: req.params._id, name: req.body.name, dept: req.body.dept, errors: error.errors, mongoError: mongoError})
+				}
 			}
 		})
 		.catch((err) => {
 			console.log("Failure accessing department info");
 			console.log(err);
 		})
-
-		if (error.isEmpty() && mongoError == "") {
-			console.log(`mongoError: ${mongoError}`);
-			daomongo.addLecturer(req.body._id, req.body.name, req.body.dept)
-				.then((result) => {
-					res.redirect("/listLecturers")
-				})
-				.catch((err) => {
-					
-					console.log(err)
-					if (err.code == 11000) {
-						mongoError = "_id already exists"
-					}
-					res.render("addLecturer", { _id: req.body._id, name: req.body.name, dept: req.body.dept, errors: error.errors, mongoError: mongoError })
-				})
-		} else {
-			res.render("addLecturer", { _id: req.params._id, name: req.body.name, dept: req.body.dept, errors: error.errors, mongoError: mongoError})
-		}
 	}
 )
