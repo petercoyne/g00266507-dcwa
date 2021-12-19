@@ -2,6 +2,7 @@ const express = require("express")
 const bp = require("body-parser")
 const { check, validationResult } = require('express-validator')
 const daosql = require("./dao-sql")
+const daomongo = require("./dao-mongo")
 
 const app = express()
 const port = 3000
@@ -63,8 +64,6 @@ app.post('/addStudent',
 	}
 )
 
-
-
 app.get('/students/delete/:sid', (req, res) => {
 	daosql.deleteStudent(req.params.sid)
 		.then((result) => {
@@ -124,3 +123,13 @@ app.post('/modules/:mid',
 			res.render("editmodule", { mid: req.params.mid, name: req.body.name, credits: req.body.credits, errors: error.errors })
 		}}
 )
+
+app.get('/listLecturers', (req,res) => {
+	daomongo.getLecturers()
+	.then((result) => {
+		res.render("lecturers", { lecturers: result })
+	})
+	.catch((error) => {
+		res.send(error)
+	})
+})
